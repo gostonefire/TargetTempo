@@ -102,7 +102,7 @@ class TargetTempoView extends WatchUi.SimpleDataField {
     //! @return The target tempo
     private function ema(isMoving as Boolean, remainTime as Float, remainDist as Float) as Float {
         var target = remainTime / remainDist;
-        System.print("Remain time: " + remainTime / 60 + " Remain dist: " + remainDist + " Raw target: " + target);
+
         // We don't want to start calculating any SMA or EMA until we have live
         // data in both elapsed time as well as elapsed distance from the device
         if (isMoving) {
@@ -127,7 +127,6 @@ class TargetTempoView extends WatchUi.SimpleDataField {
             }
 
         }
-        System.println(" Calc target: " + target);
 
         return target;
     }
