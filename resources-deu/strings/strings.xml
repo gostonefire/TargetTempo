@@ -1,0 +1,10 @@
+<strings>
+    <string id="AppName">TargetTempo</string>
+    <string id="AppLabel">Zieltempo</string>
+    <string id="TargetDistanceTitle">Entfernungsziel</string>
+    <string id="TargetDistancePrompt">Entfernung in Kilometern</string>
+    <string id="TargetDistanceError">Entfernung in ganzen Kilometern und mindestens 1</string>
+    <string id="TargetTimeTitle">Zeitziel</string>
+    <string id="TargetTimePrompt">Zeit in Minuten</string>
+    <string id="TargetTimeError">Zeit in ganzen Minuten und mindestens 1</string>
+</strings>

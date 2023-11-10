@@ -1,0 +1,8 @@
+<settings>
+    <setting propertyKey="@Properties.targetDistance" title="@Strings.TargetDistanceTitle" prompt="@Strings.TargetDistancePrompt">
+        <settingConfig type="numeric" required="true" min="1" errorMessage="@Strings.TargetDistanceError" />
+    </setting>
+    <setting propertyKey="@Properties.targetTime" title="@Strings.TargetTimeTitle" prompt="@Strings.TargetTimePrompt">
+        <settingConfig type="numeric" required="true" min="1" errorMessage="@Strings.TargetTimeError" />
+    </setting>
+</settings>

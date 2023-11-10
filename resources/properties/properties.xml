@@ -1,0 +1,4 @@
+<properties>
+    <property id="targetDistance" type="number">10</property>
+    <property id="targetTime" type="number">60</property>
+</properties>

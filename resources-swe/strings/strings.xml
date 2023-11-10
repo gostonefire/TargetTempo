@@ -1,0 +1,10 @@
+<strings>
+    <string id="AppName">TargetTempo</string>
+    <string id="AppLabel">Måltempo</string>
+    <string id="TargetDistanceTitle">Distansmål</string>
+    <string id="TargetDistancePrompt">Distans i kilometer</string>
+    <string id="TargetDistanceError">Distans i hela kilometer och minst 1</string>
+    <string id="TargetTimeTitle">Tidsmål</string>
+    <string id="TargetTimePrompt">Tid i minuter</string>
+    <string id="TargetTimeError">Tid i hela minuter och minst 1</string>
+</strings>
