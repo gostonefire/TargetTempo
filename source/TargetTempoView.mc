@@ -30,14 +30,21 @@ class TargetTempoView extends WatchUi.SimpleDataField {
     // Set the label of the data field here.
     function initialize() {
         SimpleDataField.initialize();
-        label = Application.loadResource(Rez.Strings.AppLabel);
-        
+
+        var targetMinutes = Properties.getValue("targetMinutes");
+        var targetSeconds = Properties.getValue("targetSeconds");
+        var targetDistance = Properties.getValue("targetDistance");
+
+        var format = Application.loadResource(Rez.Strings.AppLabel);
+        var params = [targetMinutes.format("%d"), targetSeconds.format("%02d"), targetDistance.format("%.1f")];
+        label = Lang.format(format, params);
+
+        _targetTime = targetMinutes * 60 + targetSeconds;
+        _targetDist = targetDistance;
+
         _targetSMA = [];
         _targetEMA = 0.0;
         _smaMode = true;
-
-        _targetTime = Properties.getValue("targetMinutes") * 60 + Properties.getValue("targetSeconds");
-        _targetDist = Properties.getValue("targetDistance");
 
         _doneFace = "--:--";
         _isDone = false;
