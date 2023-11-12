@@ -87,7 +87,7 @@ class TargetTempoView extends WatchUi.SimpleDataField {
                 } else if (minutes >= 20) {
                     targetTempo = ">20:00";
                 } else {
-                    targetTempo = minutes.format("%2d") + ":" + seconds.format("%02d");
+                    targetTempo = minutes.format("%d") + ":" + seconds.format("%02d");
                 }
             }
         }

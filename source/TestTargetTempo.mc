@@ -13,8 +13,8 @@ function targetTempoNullTest(logger as Logger) as Boolean {
     ai.elapsedTime = null;
     ai.elapsedDistance = null;
     var target = tt.compute(ai);
-    if (!target.equals(" 6:00")) {
-        logger.debug("Expected ' 6:00', got '" + target + "'");
+    if (!target.equals("6:00")) {
+        logger.debug("Expected '6:00', got '" + target + "'");
         return false;
     }
 
@@ -32,8 +32,8 @@ function targetTempoZeroTest(logger as Logger) as Boolean {
     ai.elapsedTime = 0;
     ai.elapsedDistance = 0.0;
     var target = tt.compute(ai);
-    if (!target.equals(" 6:00")) {
-        logger.debug("Expected ' 6:00', got '" + target + "'");
+    if (!target.equals("6:00")) {
+        logger.debug("Expected '6:00', got '" + target + "'");
         return false;
     }
 
@@ -59,8 +59,8 @@ function targetTempoFillSMATest(logger as Logger) as Boolean {
         target = tt.compute(ai);
     }
 
-    if (!target.equals(" 6:09")) {
-        logger.debug("Expected ' 6:09', got '" + target + "'");
+    if (!target.equals("6:09")) {
+        logger.debug("Expected '6:09', got '" + target + "'");
         return false;
     }
 
@@ -90,8 +90,8 @@ function targetTempoEMATest(logger as Logger) as Boolean {
     ai.elapsedDistance = 460.0;
     target = tt.compute(ai);
 
-    if (!target.equals(" 6:10")) {
-        logger.debug("Expected ' 6:10', got '" + target + "'");
+    if (!target.equals("6:10")) {
+        logger.debug("Expected '6:10', got '" + target + "'");
         return false;
     }
 
