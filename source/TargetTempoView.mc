@@ -36,7 +36,7 @@ class TargetTempoView extends WatchUi.SimpleDataField {
         _targetEMA = 0.0;
         _smaMode = true;
 
-        _targetTime = Properties.getValue("targetTime") * 60;
+        _targetTime = Properties.getValue("targetMinutes") * 60 + Properties.getValue("targetSeconds");
         _targetDist = Properties.getValue("targetDistance");
 
         _doneFace = "--:--";

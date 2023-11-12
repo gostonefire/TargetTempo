@@ -1,8 +1,15 @@
 <settings>
-    <setting propertyKey="@Properties.targetDistance" title="@Strings.TargetDistanceTitle" prompt="@Strings.TargetDistancePrompt">
+    <setting propertyKey="@Properties.targetDistance" title="@Strings.TargetDistanceTitle">
         <settingConfig type="numeric" required="true" min="1" errorMessage="@Strings.TargetDistanceError" />
     </setting>
-    <setting propertyKey="@Properties.targetTime" title="@Strings.TargetTimeTitle" prompt="@Strings.TargetTimePrompt">
-        <settingConfig type="numeric" required="true" min="1" errorMessage="@Strings.TargetTimeError" />
-    </setting>
+
+    <group id="groupTime" title="@Strings.TargetTimeTitle" description="@Strings.TargetTimeDescription">
+        <setting propertyKey="@Properties.targetMinutes" title="@Strings.targetMinutesTitle">
+            <settingConfig type="numeric" required="true" min="1" errorMessage="@Strings.TargetMinutesError" />
+        </setting>
+
+        <setting propertyKey="@Properties.targetSeconds" title="@Strings.targetSecondsTitle">
+            <settingConfig type="numeric" required="true" min="0" max="59" errorMessage="@Strings.TargetSecondsError" />
+        </setting>
+    </group>
 </settings>

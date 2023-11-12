@@ -1,10 +1,12 @@
 <strings>
     <string id="AppName">TargetTempo</string>
     <string id="AppLabel">Target Tempo</string>
-    <string id="TargetDistanceTitle">Target Distance</string>
-    <string id="TargetDistancePrompt">Distance in kilometers</string>
-    <string id="TargetDistanceError">Distance in whole kilometers and at least 1</string>
+    <string id="TargetDistanceTitle">Target distance in km:</string>
+    <string id="TargetDistanceError">Distance in kilometers and at least 1</string>
     <string id="TargetTimeTitle">Target Time</string>
-    <string id="TargetTimePrompt">Time in minutes</string>
-    <string id="TargetTimeError">Time in whole minutes and at least 1</string>
+    <string id="TargetTimeDescription">Target Time given in whole minutes and seconds (0-59)</string>
+    <string id="targetMinutesTitle">Minutes:</string>
+    <string id="TargetMinutesError">Whole minutes and at least 1</string>
+    <string id="targetSecondsTitle">Seconds:</string>
+    <string id="TargetSecondsError">Whole seconds (0-59)</string>
 </strings>
