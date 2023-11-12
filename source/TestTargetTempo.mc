@@ -276,7 +276,7 @@ function targetTempoDistPassedTimePassedTest(logger as Logger) as Boolean {
 
 //! Tests behaviour when internal target may blow up, i.e.
 //! when there is a small fraction of distance left.
-//! This also test that we can get the limited output of '>20:00'.
+//! This also test that we can get an estimated output of 'est. 0:00'.
 //! This test is dependent on the default property values in
 //! targeDistance and targetTime, so make sure to revert back to default
 //! after having modified persistent storage from within the simulator.
@@ -289,16 +289,17 @@ function targetTempoDistFractionLeftTest(logger as Logger) as Boolean {
 
     ai.elapsedTime = 0;
     ai.elapsedDistance = 10000.0 - 0.001;
+    ai.currentSpeed = 4.2;
     var target = tt.compute(ai);
-    if (!target.equals(">20:00")) {
-        logger.debug("Expected '>20:00', got '" + target + "'");
+    if (!target.equals("est. 0:00")) {
+        logger.debug("Expected 'est. 0:00', got '" + target + "'");
         return false;
     }
 
     return true;
 }
 
-//! Test that we can get the limited output of '<2:00'.
+//! Test that we can get the limited output of 'est. 63:57'.
 //! This test is dependent on the default property values in
 //! targeDistance and targetTime, so make sure to revert back to default
 //! after having modified persistent storage from within the simulator.
@@ -311,9 +312,10 @@ function targetTempoToHighTempoTest(logger as Logger) as Boolean {
 
     ai.elapsedTime = 3599000;
     ai.elapsedDistance = 9000.0;
+    ai.currentSpeed = 4.2;
     var target = tt.compute(ai);
-    if (!target.equals("<2:00")) {
-        logger.debug("Expected '<2:00', got '" + target + "'");
+    if (!target.equals("est. 63:57")) {
+        logger.debug("Expected 'est. 63:57', got '" + target + "'");
         return false;
     }
 

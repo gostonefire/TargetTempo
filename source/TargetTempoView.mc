@@ -56,25 +56,28 @@ class TargetTempoView extends WatchUi.SimpleDataField {
     // guarantee that compute() will be called before onUpdate().
     function compute(info as Activity.Info) as Numeric or Duration or String or Null {
 
-        return targetTempo(info.elapsedTime, info.elapsedDistance);
+        return targetTempo(info.elapsedTime, info.elapsedDistance, info.currentSpeed);
     }
 
     //! Get the target tempo necessary to reach time and distance goal,
     //! given device measured elapsed time and distance.
     //! @param deviceTime The elapsed time in milliseconds given from device
     //! @param deviceDistance The elapsed distance in meters given from device
+    //! @param deviceSpeed The current speed in m/s from device
     //! @return The proposed target tempo
-    private function targetTempo(deviceTime as Number or Null, deviceDistance as Float or Null) as String {
+    private function targetTempo(deviceTime as Number or Null, deviceDistance as Float or Null, deviceSpeed as Float or Null) as String {
         var targetTempo = _doneFace;
 
         if (!_isDone) {
             var elapsedTime = 0.0;
             var elapsedDist = 0.0;
+            var currentSpeed = 0.0;
             var isMoving = false;
 
             if (deviceTime != null && deviceDistance != null) {
                 elapsedTime = deviceTime / 1000.0;
                 elapsedDist = deviceDistance / 1000.0;
+                currentSpeed = deviceSpeed;
                 isMoving = true;
             }
 
@@ -90,9 +93,11 @@ class TargetTempoView extends WatchUi.SimpleDataField {
 
                 // Let's display only reasonable figures
                 if (minutes < 2) {
-                    targetTempo = "<2:00";
+                    // targetTempo = "<2:00";
+                    targetTempo = eta(remainDist, elapsedTime, currentSpeed);
                 } else if (minutes >= 20) {
-                    targetTempo = ">20:00";
+                    // targetTempo = ">20:00";
+                    targetTempo = eta(remainDist, elapsedTime, currentSpeed);
                 } else {
                     targetTempo = minutes.format("%d") + ":" + seconds.format("%02d");
                 }
@@ -182,3 +187,19 @@ class TargetTempoView extends WatchUi.SimpleDataField {
     }
 }
 
+//! Returns the estimated final time prefixed with est. as a string
+//! @param remainDist The distance remaining in km of set distance goal
+//! @param elapsedTime The elapsed time, as given from device, in seconds
+//! @param currentSpeed The current speed, as given from device, in m/s
+//! @return The formatted estimated final time
+function eta(remainDist as Float, elapsedTime as Float, currentSpeed as Float) as String {
+    if (currentSpeed == 0) {
+        return "est. --:--";
+    }
+
+    var est = remainDist * 1000.0 / currentSpeed + elapsedTime;
+    var minutes = Math.floor(est / 60.0);
+    var seconds = Math.floor(est - minutes * 60.0);
+
+    return "est. " + minutes.format("%d") + ":" + seconds.format("%02d");
+}
