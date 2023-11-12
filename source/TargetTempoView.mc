@@ -92,11 +92,7 @@ class TargetTempoView extends WatchUi.SimpleDataField {
                 var seconds = Math.floor(target - minutes * 60.0); 
 
                 // Let's display only reasonable figures
-                if (minutes < 2) {
-                    // targetTempo = "<2:00";
-                    targetTempo = eta(remainDist, elapsedTime, currentSpeed);
-                } else if (minutes >= 20) {
-                    // targetTempo = ">20:00";
+                if (minutes < 2 || minutes >= 20) {
                     targetTempo = eta(remainDist, elapsedTime, currentSpeed);
                 } else {
                     targetTempo = minutes.format("%d") + ":" + seconds.format("%02d");
