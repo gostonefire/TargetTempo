@@ -84,7 +84,7 @@ class TargetTempoView extends WatchUi.SimpleDataField {
             if (doDoneCheck(remainTime, remainDist)) {
                 targetTempo = _doneFace;
             } else {
-                var target = ema(isMoving, remainTime, remainDist);
+                var target = isMoving ? _emaTempo.movingAverage(remainTime / remainDist) : remainTime / remainDist;
                 var minutes = Math.floor(target / 60.0);
                 var seconds = Math.floor(target - minutes * 60.0); 
 
@@ -98,17 +98,6 @@ class TargetTempoView extends WatchUi.SimpleDataField {
         }
 
         return targetTempo;
-    }
-
-    //! Get the Exponential Moving Average over window size defined by SMA_WINDOW
-    //! @param isMoving The indication that the device has started to record movement in time and space
-    //! @param remainTime The time remaining of set time goal
-    //! @param remainDist The distance remaining of set distance goal
-    //! @return The target tempo
-    private function ema(isMoving as Boolean, remainTime as Float, remainDist as Float) as Float {
-        // We don't want to start calculating any SMA or EMA until we have live
-        // data in both elapsed time as well as elapsed distance from the device
-        return isMoving ? _emaTempo.movingAverage(remainTime / remainDist) : remainTime / remainDist;
     }
 
     //! Does a done check and updates the done-flag accordingly. Also sets the done face
