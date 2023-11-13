@@ -52,7 +52,6 @@ function targetTempoFillSMATest(logger as Logger) as Boolean {
     var ai = new Activity.Info();
     var target = "";
  
-    tt = new TargetTempoView();
     for (var i = 0; i < 10; i += 1) {
         ai.elapsedTime = i * 1000;
         ai.elapsedDistance = i * 60.0;
@@ -79,7 +78,6 @@ function targetTempoEMATest(logger as Logger) as Boolean {
     var ai = new Activity.Info();
     var target = "";
  
-    tt = new TargetTempoView();
     for (var i = 0; i < 10; i += 1) {
         ai.elapsedTime = i * 1000;
         ai.elapsedDistance = i * 60.0;

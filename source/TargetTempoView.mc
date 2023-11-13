@@ -11,13 +11,9 @@ class TargetTempoView extends WatchUi.SimpleDataField {
     // Movin Average constants
     private const SMA_WINDOW = 10;
     private const EMA_SMOOTHING = 2.0;
-    private const EMA_MULTIPLIER as Float = EMA_SMOOTHING / (1.0 + SMA_WINDOW);
 
-    // Moving Average variables, Simple Moving Average is allways the start of 
-    // an Exponential Moving Average 
-    private var _targetSMA as Array;
-    private var _targetEMA as Float;
-    private var _smaMode as Boolean;
+    // The Moving Average for target tempo
+    private var _emaTempo as MovingAverage;
 
     // Stores settings from properties to avoid reading them every second in the compute method
     private var _targetTime as Number;
@@ -27,24 +23,25 @@ class TargetTempoView extends WatchUi.SimpleDataField {
     private var _doneFace as String;
     private var _isDone as Boolean;
 
-    // Set the label of the data field here.
+    // Initializes variables and sets the label
     function initialize() {
         SimpleDataField.initialize();
 
+        // Load properties values
         var targetMinutes = Properties.getValue("targetMinutes");
         var targetSeconds = Properties.getValue("targetSeconds");
         var targetDistance = Properties.getValue("targetDistance");
 
+        // Construct the label that shows current time and distance goal
         var format = Application.loadResource(Rez.Strings.AppLabel);
         var params = [targetMinutes.format("%d"), targetSeconds.format("%02d"), targetDistance.format("%.1f")];
         label = Lang.format(format, params);
 
+        // Set target time in seconds and target distance as given in kilometers
         _targetTime = targetMinutes * 60 + targetSeconds;
         _targetDist = targetDistance;
 
-        _targetSMA = [];
-        _targetEMA = 0.0;
-        _smaMode = true;
+        _emaTempo = new MovingAverage(true, SMA_WINDOW, EMA_SMOOTHING);
 
         _doneFace = "--:--";
         _isDone = false;
@@ -109,34 +106,9 @@ class TargetTempoView extends WatchUi.SimpleDataField {
     //! @param remainDist The distance remaining of set distance goal
     //! @return The target tempo
     private function ema(isMoving as Boolean, remainTime as Float, remainDist as Float) as Float {
-        var target = remainTime / remainDist;
-
         // We don't want to start calculating any SMA or EMA until we have live
         // data in both elapsed time as well as elapsed distance from the device
-        if (isMoving) {
-            if (_smaMode) {
-                _targetSMA.add(target);
-
-                var sum = 0;
-                for (var i = 0; i < _targetSMA.size(); i += 1) {
-                    sum += _targetSMA[i];
-                }
-                target = sum / _targetSMA.size();
-
-                if (_targetSMA.size() >= SMA_WINDOW) {
-                    _targetSMA = [];
-                    _targetEMA = target;
-                    _smaMode = false;
-                }
-                
-            } else {
-                target = target * EMA_MULTIPLIER + _targetEMA * (1 - EMA_MULTIPLIER);
-                _targetEMA = target;
-            }
-
-        }
-
-        return target;
+        return isMoving ? _emaTempo.movingAverage(remainTime / remainDist) : remainTime / remainDist;
     }
 
     //! Does a done check and updates the done-flag accordingly. Also sets the done face
