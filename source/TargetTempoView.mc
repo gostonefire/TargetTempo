@@ -12,12 +12,17 @@ class TargetTempoView extends WatchUi.SimpleDataField {
     private const SMA_WINDOW = 10;
     private const EMA_SMOOTHING = 2.0;
 
-    // The Moving Average for target tempo
+    // The Moving Average for target tempo and speed
     private var _emaTempo as MovingAverage;
+    private var _emaSpeed as MovingAverage;
 
     // Stores settings from properties to avoid reading them every second in the compute method
     private var _targetTime as Number;
     private var _targetDist as Number;
+
+    // Display option for when to display ETA instead of target tempo
+    private var _displayOption as Number;
+    private var _etaAlternate as Number;
 
     // The done flag and what face to show when we are done
     private var _doneFace as String;
@@ -30,21 +35,23 @@ class TargetTempoView extends WatchUi.SimpleDataField {
         // Load properties values
         var targetMinutes = Properties.getValue("targetMinutes");
         var targetSeconds = Properties.getValue("targetSeconds");
-        var targetDistance = Properties.getValue("targetDistance");
+        _targetDist = Properties.getValue("targetDistance");
+        _displayOption = Properties.getValue("displayOption");
 
         // Construct the label that shows current time and distance goal
         var format = Application.loadResource(Rez.Strings.AppLabel);
-        var params = [targetMinutes.format("%d"), targetSeconds.format("%02d"), targetDistance.format("%.1f")];
+        var params = [targetMinutes.format("%d"), targetSeconds.format("%02d"), _targetDist.format("%.1f")];
         label = Lang.format(format, params);
 
-        // Set target time in seconds and target distance as given in kilometers
+        // Set target time in seconds
         _targetTime = targetMinutes * 60 + targetSeconds;
-        _targetDist = targetDistance;
 
         _emaTempo = new MovingAverage(true, SMA_WINDOW, EMA_SMOOTHING);
+        _emaSpeed = new MovingAverage(true, SMA_WINDOW, EMA_SMOOTHING);
 
         _doneFace = "--:--";
         _isDone = false;
+        _etaAlternate = -3;
     }
 
     // The given info object contains all the current workout
@@ -71,10 +78,10 @@ class TargetTempoView extends WatchUi.SimpleDataField {
             var currentSpeed = 0.0;
             var isMoving = false;
 
-            if (deviceTime != null && deviceDistance != null) {
+            if (deviceTime != null && deviceDistance != null && deviceSpeed != null) {
                 elapsedTime = deviceTime / 1000.0;
                 elapsedDist = deviceDistance / 1000.0;
-                currentSpeed = deviceSpeed;
+                currentSpeed = _emaSpeed.movingAverage(deviceSpeed);
                 isMoving = true;
             }
 
@@ -84,15 +91,21 @@ class TargetTempoView extends WatchUi.SimpleDataField {
             if (doDoneCheck(remainTime, remainDist)) {
                 targetTempo = _doneFace;
             } else {
-                var target = isMoving ? _emaTempo.movingAverage(remainTime / remainDist) : remainTime / remainDist;
-                var minutes = Math.floor(target / 60.0);
-                var seconds = Math.floor(target - minutes * 60.0); 
-
-                // Let's display only reasonable figures
-                if (minutes < 2 || minutes >= 20) {
+                if (_displayOption == 1 && remainDist <= 1.0 || _displayOption == 3) {
                     targetTempo = eta(remainDist, elapsedTime, currentSpeed);
                 } else {
-                    targetTempo = minutes.format("%d") + ":" + seconds.format("%02d");
+                    var target = isMoving ? _emaTempo.movingAverage(remainTime / remainDist) : remainTime / remainDist;
+                    var minutes = Math.floor(target / 60.0);
+                    var seconds = Math.floor(target - minutes * 60.0); 
+
+                    // Let's display only reasonable figures or alternate
+                    if (minutes < 2 || minutes >= 20 || (_displayOption == 2 && _etaAlternate >= 0)) {
+                        targetTempo = eta(remainDist, elapsedTime, currentSpeed);
+                    } else {
+                        targetTempo = minutes.format("%d") + ":" + seconds.format("%02d");
+                    }
+
+                    _etaAlternate = _etaAlternate == 2 ? -3 : _etaAlternate + 1;
                 }
             }
         }

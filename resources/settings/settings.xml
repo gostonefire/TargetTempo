@@ -12,4 +12,13 @@
             <settingConfig type="numeric" required="true" min="0" max="59" errorMessage="@Strings.TargetSecondsError" />
         </setting>
     </group>
+
+    <setting propertyKey="@Properties.displayOption" title="@Strings.DisplayOptionsTitle">
+        <settingConfig type="list">
+            <listEntry value="0">@Strings.DisplayOption0</listEntry>
+            <listEntry value="1">@Strings.DisplayOption1</listEntry>
+            <listEntry value="2">@Strings.DisplayOption2</listEntry>
+            <listEntry value="3">@Strings.DisplayOption3</listEntry>
+        </settingConfig>
+    </setting>
 </settings>

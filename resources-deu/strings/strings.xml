@@ -1,12 +1,20 @@
 <strings>
     <string id="AppName">TargetTempo</string>
     <string id="AppLabel">Z $1$:$2$ D $3$</string>
+
     <string id="TargetDistanceTitle">Entfernungsziel in km:</string>
     <string id="TargetDistanceError">Entfernung Kilometern und mindestens 1</string>
+
     <string id="TargetTimeTitle">Zeitziel</string>
     <string id="TargetTimeDescription">Zeit in ganzen Minuten und Sekunden (0-59)</string>
     <string id="targetMinutesTitle">Minuten:</string>
     <string id="TargetMinutesError">Ganzen Minuten und mindestens 1</string>
     <string id="targetSecondsTitle">Sekunden:</string>
     <string id="TargetSecondsError">Ganzen Sekunden (0-59)</string>
+
+    <string id="DisplayOptionsTitle">Option zur ETA anzeige:</string>
+    <string id="DisplayOption0">Tempo außerhalb 2-20</string>
+    <string id="DisplayOption1">Während des letzten Kilometers</string>
+    <string id="DisplayOption2">Abwechselnd zwischen Tempo und ETA</string>
+    <string id="DisplayOption3">Anzeigen immer die ETA</string>
 </strings>
