@@ -164,12 +164,12 @@ class TargetTempoView extends WatchUi.SimpleDataField {
 //! @return The formatted estimated final time
 function eta(remainDist as Float, elapsedTime as Float, currentSpeed as Float) as String {
     if (currentSpeed == 0) {
-        return "est. --:--";
+        return "Est --:--";
     }
 
     var est = remainDist * 1000.0 / currentSpeed + elapsedTime;
     var minutes = Math.floor(est / 60.0);
     var seconds = Math.floor(est - minutes * 60.0);
 
-    return "est. " + minutes.format("%d") + ":" + seconds.format("%02d");
+    return "Est " + minutes.format("%d") + ":" + seconds.format("%02d");
 }
