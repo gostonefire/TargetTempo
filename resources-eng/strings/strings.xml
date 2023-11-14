@@ -1,6 +1,6 @@
 <strings>
     <string id="AppName">TargetTempo</string>
-    <string id="AppLabel">T $1$:$2$ D $3$</string>
+    <string id="AppLabel">$1$:$2$ $3$</string>
 
     <string id="TargetDistanceTitle">Target distance in km:</string>
     <string id="TargetDistanceError">Distance in kilometers and at least 1</string>
