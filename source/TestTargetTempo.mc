@@ -1,6 +1,7 @@
 import Toybox.Activity;
 import Toybox.Lang;
 import Toybox.Test;
+import Toybox.Application.Properties;
 
 //! Tests behaviour when device still reports nulls. 
 //! @param logger Is a Test.Logger object
@@ -326,6 +327,79 @@ function targetTempoToHighTempoTest(logger as Logger) as Boolean {
     var target = tt.compute(ai);
     if (!target.equals("eta 65:32")) {
         logger.debug("Expected 'eta 65:32', got '" + target + "'");
+        return false;
+    }
+
+    return true;
+}
+
+//! Tests behaviour after SMA has handed over to EMA. 
+//! This test is dependent on the default property values in
+//! targeDistance and targetTime, so make sure to revert back to default
+//! after having modified persistent storage from within the simulator.
+//! @param logger Is a Test.Logger object
+//! @return A boolean indicating success (true) or fail (false)
+(:test)
+function targetTempoETATest(logger as Logger) as Boolean {
+    Properties.setValue("displayOption", 3);
+    var tt = new TargetTempoView();
+    var ai = new Activity.Info();
+    var target = "";
+ 
+    for (var i = 0; i < 200; i += 1) {
+        ai.elapsedTime = i * 1000;
+        ai.elapsedDistance = i * 3.0;
+        ai.currentSpeed = 3.0;
+        tt.compute(ai);
+    }
+
+    ai.elapsedTime = 200000;
+    ai.elapsedDistance = 600.0;
+    ai.currentSpeed = 6.0;
+    target = tt.compute(ai);
+
+    // expected output given a moving window size of 120 and one item in the buffer is 6.0
+    // and the rest 3.0
+    if (!target.equals("eta 55:07")) {
+        logger.debug("Expected 'eta 55:07', got '" + target + "'");
+        return false;
+    }
+
+    for (var i = 0; i < 200; i += 1) {
+        ai.elapsedTime = i * 1000 + 2000000;
+        ai.elapsedDistance = i * 3.0 + 6000;
+        ai.currentSpeed = 3.0;
+        tt.compute(ai);
+    }
+
+    ai.elapsedTime = 2200000;
+    ai.elapsedDistance = 6600.0;
+    ai.currentSpeed = 6.0;
+    target = tt.compute(ai);
+
+    // expected output given a moving window size of 60 and one item in the buffer is 6.0
+    // and the rest 3.0
+    if (!target.equals("eta 55:14")) {
+        logger.debug("Expected 'eta 55:14', got '" + target + "'");
+        return false;
+    }
+
+    for (var i = 0; i < 100; i += 1) {
+        ai.elapsedTime = i * 1000 + 2833333;
+        ai.elapsedDistance = i * 3.0 + 8500;
+        ai.currentSpeed = 3.0;
+        tt.compute(ai);
+    }
+
+    ai.elapsedTime = 2933333;
+    ai.elapsedDistance = 8800.0;
+    ai.currentSpeed = 6.0;
+    target = tt.compute(ai);
+
+    // expected output given a moving window size of 10 and one item in the buffer is 6.0
+    // and the rest 3.0
+    if (!target.equals("eta 54:56")) {
+        logger.debug("Expected 'eta 54:56', got '" + target + "'");
         return false;
     }
 
