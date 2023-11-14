@@ -5,11 +5,9 @@
     <string id="TargetDistanceTitle">Distansmål i km:</string>
     <string id="TargetDistanceError">Distans i kilometer och minst 1</string>
 
-    <string id="TargetTimeTitle">Tidsmål</string>
-    <string id="TargetTimeDescription">Tidsmål i hela minuter och sekunder (0-59)</string>
-    <string id="targetMinutesTitle">Minuter:</string>
+    <string id="targetMinutesTitle">Mål minuter (1-):</string>
     <string id="TargetMinutesError">Hela minuter och minst 1</string>
-    <string id="targetSecondsTitle">Sekunder:</string>
+    <string id="targetSecondsTitle">Mål sekunder (0-59):</string>
     <string id="TargetSecondsError">Hela sekunder (0-59)</string>
 
     <string id="DisplayOptionsTitle">ETA visningsalternativ:</string>

@@ -5,11 +5,9 @@
     <string id="TargetDistanceTitle">Target distance in km:</string>
     <string id="TargetDistanceError">Distance in kilometers and at least 1</string>
 
-    <string id="TargetTimeTitle">Target Time</string>
-    <string id="TargetTimeDescription">Target Time given in whole minutes and seconds (0-59)</string>
-    <string id="targetMinutesTitle">Minutes:</string>
+    <string id="targetMinutesTitle">Target minutes (1-):</string>
     <string id="TargetMinutesError">Whole minutes and at least 1</string>
-    <string id="targetSecondsTitle">Seconds:</string>
+    <string id="targetSecondsTitle">Target seconds (0-59):</string>
     <string id="TargetSecondsError">Whole seconds (0-59)</string>
 
     <string id="DisplayOptionsTitle">ETA display option:</string>
