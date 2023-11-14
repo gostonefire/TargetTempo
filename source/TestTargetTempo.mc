@@ -12,6 +12,7 @@ function targetTempoNullTest(logger as Logger) as Boolean {
 
     ai.elapsedTime = null;
     ai.elapsedDistance = null;
+    ai.currentSpeed = null;
     var target = tt.compute(ai);
     if (!target.equals("6:00")) {
         logger.debug("Expected '6:00', got '" + target + "'");
@@ -31,6 +32,7 @@ function targetTempoZeroTest(logger as Logger) as Boolean {
 
     ai.elapsedTime = 0;
     ai.elapsedDistance = 0.0;
+    ai.currentSpeed = 0.0;
     var target = tt.compute(ai);
     if (!target.equals("6:00")) {
         logger.debug("Expected '6:00', got '" + target + "'");
@@ -55,6 +57,7 @@ function targetTempoFillSMATest(logger as Logger) as Boolean {
     for (var i = 0; i < 10; i += 1) {
         ai.elapsedTime = i * 1000;
         ai.elapsedDistance = i * 60.0;
+        ai.currentSpeed = 3.0;
         target = tt.compute(ai);
     }
 
@@ -81,6 +84,7 @@ function targetTempoEMATest(logger as Logger) as Boolean {
     for (var i = 0; i < 10; i += 1) {
         ai.elapsedTime = i * 1000;
         ai.elapsedDistance = i * 60.0;
+        ai.currentSpeed = 3.0;
         tt.compute(ai);
     }
 
@@ -109,6 +113,7 @@ function targetTempoDistLeftTimeEqualTest(logger as Logger) as Boolean {
 
     ai.elapsedTime = 3600000;
     ai.elapsedDistance = 9995.0;
+    ai.currentSpeed = 3.0;
     var target = tt.compute(ai);
     if (!target.equals(":-(")) {
         logger.debug("Expected ':-(', got '" + target + "'");
@@ -131,6 +136,7 @@ function targetTempoDistLeftTimePassedTest(logger as Logger) as Boolean {
 
     ai.elapsedTime = 3601000;
     ai.elapsedDistance = 9995.0;
+    ai.currentSpeed = 3.0;
     var target = tt.compute(ai);
     if (!target.equals(":-(")) {
         logger.debug("Expected ':-(', got '" + target + "'");
@@ -153,6 +159,7 @@ function targetTempoDistEqualTimeLeftTest(logger as Logger) as Boolean {
 
     ai.elapsedTime = 3599000;
     ai.elapsedDistance = 10000.0;
+    ai.currentSpeed = 3.0;
     var target = tt.compute(ai);
     if (!target.equals(":-)")) {
         logger.debug("Expected ':-)', got '" + target + "'");
@@ -175,6 +182,7 @@ function targetTempoDistEqualTimeEqualTest(logger as Logger) as Boolean {
 
     ai.elapsedTime = 3600000;
     ai.elapsedDistance = 10000.0;
+    ai.currentSpeed = 3.0;
     var target = tt.compute(ai);
     if (!target.equals(":-)")) {
         logger.debug("Expected ':-)', got '" + target + "'");
@@ -197,6 +205,7 @@ function targetTempoDistEqualTimePassedTest(logger as Logger) as Boolean {
 
     ai.elapsedTime = 3601000;
     ai.elapsedDistance = 10000.0;
+    ai.currentSpeed = 3.0;
     var target = tt.compute(ai);
     if (!target.equals(":-(")) {
         logger.debug("Expected ':-(', got '" + target + "'");
@@ -219,6 +228,7 @@ function targetTempoDistPassedTimeLeftTest(logger as Logger) as Boolean {
 
     ai.elapsedTime = 3599000;
     ai.elapsedDistance = 10001.0;
+    ai.currentSpeed = 3.0;
     var target = tt.compute(ai);
     if (!target.equals(":-)")) {
         logger.debug("Expected ':-)', got '" + target + "'");
@@ -241,6 +251,7 @@ function targetTempoDistPassedTimeEqualTest(logger as Logger) as Boolean {
 
     ai.elapsedTime = 3600000;
     ai.elapsedDistance = 10001.0;
+    ai.currentSpeed = 3.0;
     var target = tt.compute(ai);
     if (!target.equals(":-)")) {
         logger.debug("Expected ':-)', got '" + target + "'");
@@ -263,6 +274,7 @@ function targetTempoDistPassedTimePassedTest(logger as Logger) as Boolean {
 
     ai.elapsedTime = 3601000;
     ai.elapsedDistance = 10001.0;
+    ai.currentSpeed = 3.0;
     var target = tt.compute(ai);
     if (!target.equals(":-)")) {
         logger.debug("Expected ':-)', got '" + target + "'");
@@ -274,7 +286,7 @@ function targetTempoDistPassedTimePassedTest(logger as Logger) as Boolean {
 
 //! Tests behaviour when internal target may blow up, i.e.
 //! when there is a small fraction of distance left.
-//! This also test that we can get an estimated output of 'est. 0:00'.
+//! This also test that we can get an estimated output of 'eta 0:00'.
 //! This test is dependent on the default property values in
 //! targeDistance and targetTime, so make sure to revert back to default
 //! after having modified persistent storage from within the simulator.
@@ -287,17 +299,17 @@ function targetTempoDistFractionLeftTest(logger as Logger) as Boolean {
 
     ai.elapsedTime = 0;
     ai.elapsedDistance = 10000.0 - 0.001;
-    ai.currentSpeed = 4.2;
+    ai.currentSpeed = 3.0;
     var target = tt.compute(ai);
-    if (!target.equals("est. 0:00")) {
-        logger.debug("Expected 'est. 0:00', got '" + target + "'");
+    if (!target.equals("eta 0:00")) {
+        logger.debug("Expected 'eta 0:00', got '" + target + "'");
         return false;
     }
 
     return true;
 }
 
-//! Test that we can get the limited output of 'est. 63:57'.
+//! Test that we can get the limited output of 'eta 65:32'.
 //! This test is dependent on the default property values in
 //! targeDistance and targetTime, so make sure to revert back to default
 //! after having modified persistent storage from within the simulator.
@@ -310,10 +322,10 @@ function targetTempoToHighTempoTest(logger as Logger) as Boolean {
 
     ai.elapsedTime = 3599000;
     ai.elapsedDistance = 9000.0;
-    ai.currentSpeed = 4.2;
+    ai.currentSpeed = 3.0;
     var target = tt.compute(ai);
-    if (!target.equals("est. 63:57")) {
-        logger.debug("Expected 'est. 63:57', got '" + target + "'");
+    if (!target.equals("eta 65:32")) {
+        logger.debug("Expected 'eta 65:32', got '" + target + "'");
         return false;
     }
 

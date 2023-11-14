@@ -6,8 +6,10 @@ import Toybox.Lang;
 class MovingAverage {
     // Theese are set and never changed during the lifetime of a MovingAverage object
     private var _exponential as Boolean;
-    private var _windowSize as Number;
     private var _emaMultiplier as Float;
+
+    // The window size can be shrunken using the shrink method
+    private var _windowSize as Number;
 
     // Moving Average variables, Simple Moving Average is allways the start of 
     // an Exponential Moving Average 
@@ -60,6 +62,22 @@ class MovingAverage {
         }
 
         return value;
+    }
+
+    //! Shrinks the window size by one and removes the oldest value from the 
+    //! buffer. Smallest window size allowed is 1. 
+    //! This will only affect a Simple Moving Average.
+    //! @param minSize The minimum window size to step down to
+    //! @return The new (or unchanged) window size
+    function shrink(minSize as Number) as Number {
+        if (_windowSize > 1 && _windowSize > minSize && !_exponential) {
+            if (_sma.size() >= _windowSize) {
+                _sma.remove(_sma[0]);
+            }
+            _windowSize -= 1;
+        }
+
+        return _windowSize;
     }
 
     //! Get the size of the Simple Moving Average buffer array.

@@ -8,13 +8,9 @@ import Toybox.Application.Properties;
 
 //! Data field that shows target tempo to reach time and distance goal
 class TargetTempoView extends WatchUi.SimpleDataField {
-    // Movin Average constants
-    private const SMA_WINDOW = 10;
-    private const EMA_SMOOTHING = 2.0;
-
     // The Moving Average for target tempo and speed
     private var _emaTempo as MovingAverage;
-    private var _emaSpeed as MovingAverage;
+    private var _smaSpeed as MovingAverage;
 
     // Stores settings from properties to avoid reading them every second in the compute method
     private var _targetTime as Number;
@@ -46,8 +42,17 @@ class TargetTempoView extends WatchUi.SimpleDataField {
         // Set target time in seconds
         _targetTime = targetMinutes * 60 + targetSeconds;
 
-        _emaTempo = new MovingAverage(true, SMA_WINDOW, EMA_SMOOTHING);
-        _emaSpeed = new MovingAverage(true, SMA_WINDOW, EMA_SMOOTHING);
+        // Changes in speed when there are much distance left makes the EAT jump very much,
+        // hence we give a long moving average window to longer distances. 
+        // Later it will be stepped down.
+        var smaWindow = 10;
+        if (_targetDist >=4.0) {
+            smaWindow = 120;
+        } else if (_targetDist >= 1.5) {
+            smaWindow = 60;
+        }
+        _emaTempo = new MovingAverage(true, 10, 2.0);
+        _smaSpeed = new MovingAverage(false, smaWindow, 2.0);
 
         _doneFace = "--:--";
         _isDone = false;
@@ -81,12 +86,15 @@ class TargetTempoView extends WatchUi.SimpleDataField {
             if (deviceTime != null && deviceDistance != null && deviceSpeed != null) {
                 elapsedTime = deviceTime / 1000.0;
                 elapsedDist = deviceDistance / 1000.0;
-                currentSpeed = _emaSpeed.movingAverage(deviceSpeed);
+                currentSpeed = _smaSpeed.movingAverage(deviceSpeed);
+                // System.println(deviceSpeed + " " + currentSpeed + " " + _smaSpeed.size() + " " + elapsedTime + " " + elapsedDist);
                 isMoving = true;
             }
 
             var remainTime = _targetTime - elapsedTime;
             var remainDist = _targetDist - elapsedDist;
+
+            shrinkSpeedMovingAverage(remainDist);
 
             if (doDoneCheck(remainTime, remainDist)) {
                 targetTempo = _doneFace;
@@ -155,6 +163,16 @@ class TargetTempoView extends WatchUi.SimpleDataField {
         _doneFace = ":-)";
         return _isDone;
     }
+
+    //! Dynamically shrinks the moving average for the speed component
+    //! @param remainDist The remaining distance to govern the minimum moving average window size
+    private function shrinkSpeedMovingAverage(remainDist as Float) {
+        if (remainDist < 4.0 && remainDist >= 1.5) {
+            _smaSpeed.shrink(60);
+        } else if (remainDist < 1.5) {
+            _smaSpeed.shrink(10);
+        }
+    }
 }
 
 //! Returns the estimated final time prefixed with est. as a string
@@ -164,12 +182,12 @@ class TargetTempoView extends WatchUi.SimpleDataField {
 //! @return The formatted estimated final time
 function eta(remainDist as Float, elapsedTime as Float, currentSpeed as Float) as String {
     if (currentSpeed == 0) {
-        return "Est --:--";
+        return "eta --:--";
     }
 
     var est = remainDist * 1000.0 / currentSpeed + elapsedTime;
     var minutes = Math.floor(est / 60.0);
     var seconds = Math.floor(est - minutes * 60.0);
 
-    return "Est " + minutes.format("%d") + ":" + seconds.format("%02d");
+    return "eta " + minutes.format("%d") + ":" + seconds.format("%02d");
 }
