@@ -93,3 +93,67 @@ function emaTest(logger as Logger) as Boolean {
     
     return true;
 }
+
+//! Tests behaviour in SMA mode with shrinking window
+//! @param logger Is a Test.Logger object
+//! @return A boolean indicating success (true) or fail (false)
+(:test)
+function smaDynamicWindowTest(logger as Logger) as Boolean {
+    var ma = new MovingAverage(false, 20, 2.0);
+    var value = 0.0;
+
+    if (ma.size() != 0) {
+        logger.debug("Expected 0, got " + ma.size());
+        return false;
+    }
+ 
+    // Start with 10 low ones
+    for (var i = 0.0; i < 10; i += 1) {
+        value = ma.movingAverage(i);
+    }
+
+    if (value != 4.5) {
+        logger.debug("Expected 4.5, got " + value);
+        return false;
+    }
+
+    if (ma.size() != 10) {
+        logger.debug("Expected 10, got " + ma.size());
+        return false;
+    }
+
+    // Continue with 10 higher ones 
+    for (var i = 0.0; i < 10; i += 1) {
+        value = ma.movingAverage(i + 100);
+    }
+
+    if (value != 54.5) {
+        logger.debug("Expected 54.5, got " + value);
+        return false;
+    }
+
+    if (ma.size() != 20) {
+        logger.debug("Expected 20, got " + ma.size());
+        return false;
+    }
+
+    // Shrink 20 times but with minimum window size 10 and then add 110
+    // We should then have values between 101 and 110 in the buffer
+    for (var i = 0.0; i < 20; i += 1) {
+        ma.shrink(10);
+    }
+
+    value = ma.movingAverage(110.0);
+
+    if (value != 105.5) {
+        logger.debug("Expected 105.5, got " + value);
+        return false;
+    }
+
+    if (ma.size() != 10) {
+        logger.debug("Expected 10, got " + ma.size());
+        return false;
+    }
+
+    return true;
+}
