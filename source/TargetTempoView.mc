@@ -129,38 +129,16 @@ class TargetTempoView extends WatchUi.SimpleDataField {
     //! @return The value of the done flag for convinience
     private function doDoneCheck(remainTime as Float, remainDist as Float) as Boolean {
 
-        // If we are not done, then just return the current state of the done flag
-        if (remainDist > 0 && remainTime > 0) {
-            return _isDone;
-        }
-
-        // If there is still distance to do, but the time is out, then we are done with a sad face
-        if (remainDist > 0 && remainTime <= 0) {
+        if (remainDist <= 0) {
             _isDone = true;
-            _doneFace = ":-(";
-            return _isDone;
+            var finishTime = _targetTime - remainTime;
+
+            var minutes = Math.floor(finishTime / 60.0);
+            var seconds = Math.floor(finishTime - minutes * 60.0);
+
+            _doneFace = "fin " + minutes.format("%d") + ":" + seconds.format("%02d");
         }
 
-        // Very slim chance that we have remain dist equal to zero (it's a float), but if so and the time 
-        // has already passed zero, we are done with a sad face
-        if (remainDist == 0 && remainTime < 0) {
-            _isDone = true;
-            _doneFace = ":-(";
-            return _isDone;
-        }
-
-        // Very slim chance that we have remain dist equal to zero (it's a float), but if so and 
-        // there is time left (or in fact exactly zero), we are done with a happy face
-        if (remainDist == 0 && remainTime >= 0) {
-            _isDone = true;
-            _doneFace = ":-)";
-            return _isDone;
-        }
-
-        // If all above is not true, then the only remaining situation is that we completed the distance
-        // and either have time left or completed time at the same step, hence we are done with a happy face
-        _isDone = true;
-        _doneFace = ":-)";
         return _isDone;
     }
 

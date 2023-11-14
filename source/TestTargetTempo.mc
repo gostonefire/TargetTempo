@@ -101,7 +101,7 @@ function targetTempoEMATest(logger as Logger) as Boolean {
     return true;
 }
 
-//! Tests behaviour when distance is left and time is exactly out 
+//! Tests behaviour when distance is left and time is out 
 //! This test is dependent on the default property values in
 //! targeDistance and targetTime, so make sure to revert back to default
 //! after having modified persistent storage from within the simulator.
@@ -113,87 +113,18 @@ function targetTempoDistLeftTimeEqualTest(logger as Logger) as Boolean {
     var ai = new Activity.Info();
 
     ai.elapsedTime = 3600000;
-    ai.elapsedDistance = 9995.0;
+    ai.elapsedDistance = 9970.0;
     ai.currentSpeed = 3.0;
     var target = tt.compute(ai);
-    if (!target.equals(":-(")) {
-        logger.debug("Expected ':-(', got '" + target + "'");
+    if (!target.equals("eta 60:10")) {
+        logger.debug("Expected 'eta 60:10', got '" + target + "'");
         return false;
     }
 
     return true;
 }
 
-//! Tests behaviour when distance is left and time passed 
-//! This test is dependent on the default property values in
-//! targeDistance and targetTime, so make sure to revert back to default
-//! after having modified persistent storage from within the simulator.
-//! @param logger Is a Test.Logger object
-//! @return A boolean indicating success (true) or fail (false)
-(:test)
-function targetTempoDistLeftTimePassedTest(logger as Logger) as Boolean {
-    var tt = new TargetTempoView();
-    var ai = new Activity.Info();
-
-    ai.elapsedTime = 3601000;
-    ai.elapsedDistance = 9995.0;
-    ai.currentSpeed = 3.0;
-    var target = tt.compute(ai);
-    if (!target.equals(":-(")) {
-        logger.debug("Expected ':-(', got '" + target + "'");
-        return false;
-    }
-
-    return true;
-}
-
-//! Tests behaviour when distance is exactly out and time is left 
-//! This test is dependent on the default property values in
-//! targeDistance and targetTime, so make sure to revert back to default
-//! after having modified persistent storage from within the simulator.
-//! @param logger Is a Test.Logger object
-//! @return A boolean indicating success (true) or fail (false)
-(:test)
-function targetTempoDistEqualTimeLeftTest(logger as Logger) as Boolean {
-    var tt = new TargetTempoView();
-    var ai = new Activity.Info();
-
-    ai.elapsedTime = 3599000;
-    ai.elapsedDistance = 10000.0;
-    ai.currentSpeed = 3.0;
-    var target = tt.compute(ai);
-    if (!target.equals(":-)")) {
-        logger.debug("Expected ':-)', got '" + target + "'");
-        return false;
-    }
-
-    return true;
-}
-
-//! Tests behaviour when distance is exactly out and time is exactly out
-//! This test is dependent on the default property values in
-//! targeDistance and targetTime, so make sure to revert back to default
-//! after having modified persistent storage from within the simulator.
-//! @param logger Is a Test.Logger object
-//! @return A boolean indicating success (true) or fail (false)
-(:test)
-function targetTempoDistEqualTimeEqualTest(logger as Logger) as Boolean {
-    var tt = new TargetTempoView();
-    var ai = new Activity.Info();
-
-    ai.elapsedTime = 3600000;
-    ai.elapsedDistance = 10000.0;
-    ai.currentSpeed = 3.0;
-    var target = tt.compute(ai);
-    if (!target.equals(":-)")) {
-        logger.debug("Expected ':-)', got '" + target + "'");
-        return false;
-    }
-
-    return true;
-}
-
-//! Tests behaviour when distance is exactly out and time passed
+//! Tests behaviour when distance is done and time has passed 
 //! This test is dependent on the default property values in
 //! targeDistance and targetTime, so make sure to revert back to default
 //! after having modified persistent storage from within the simulator.
@@ -204,81 +135,12 @@ function targetTempoDistEqualTimePassedTest(logger as Logger) as Boolean {
     var tt = new TargetTempoView();
     var ai = new Activity.Info();
 
-    ai.elapsedTime = 3601000;
+    ai.elapsedTime = 3610000;
     ai.elapsedDistance = 10000.0;
     ai.currentSpeed = 3.0;
     var target = tt.compute(ai);
-    if (!target.equals(":-(")) {
-        logger.debug("Expected ':-(', got '" + target + "'");
-        return false;
-    }
-
-    return true;
-}
-
-//! Tests behaviour when distance passed and time is left
-//! This test is dependent on the default property values in
-//! targeDistance and targetTime, so make sure to revert back to default
-//! after having modified persistent storage from within the simulator.
-//! @param logger Is a Test.Logger object
-//! @return A boolean indicating success (true) or fail (false)
-(:test)
-function targetTempoDistPassedTimeLeftTest(logger as Logger) as Boolean {
-    var tt = new TargetTempoView();
-    var ai = new Activity.Info();
-
-    ai.elapsedTime = 3599000;
-    ai.elapsedDistance = 10001.0;
-    ai.currentSpeed = 3.0;
-    var target = tt.compute(ai);
-    if (!target.equals(":-)")) {
-        logger.debug("Expected ':-)', got '" + target + "'");
-        return false;
-    }
-
-    return true;
-}
-
-//! Tests behaviour when distance passed and time is exactly out
-//! This test is dependent on the default property values in
-//! targeDistance and targetTime, so make sure to revert back to default
-//! after having modified persistent storage from within the simulator.
-//! @param logger Is a Test.Logger object
-//! @return A boolean indicating success (true) or fail (false)
-(:test)
-function targetTempoDistPassedTimeEqualTest(logger as Logger) as Boolean {
-    var tt = new TargetTempoView();
-    var ai = new Activity.Info();
-
-    ai.elapsedTime = 3600000;
-    ai.elapsedDistance = 10001.0;
-    ai.currentSpeed = 3.0;
-    var target = tt.compute(ai);
-    if (!target.equals(":-)")) {
-        logger.debug("Expected ':-)', got '" + target + "'");
-        return false;
-    }
-
-    return true;
-}
-
-//! Tests behaviour when distance passed and time passed
-//! This test is dependent on the default property values in
-//! targeDistance and targetTime, so make sure to revert back to default
-//! after having modified persistent storage from within the simulator.
-//! @param logger Is a Test.Logger object
-//! @return A boolean indicating success (true) or fail (false)
-(:test)
-function targetTempoDistPassedTimePassedTest(logger as Logger) as Boolean {
-    var tt = new TargetTempoView();
-    var ai = new Activity.Info();
-
-    ai.elapsedTime = 3601000;
-    ai.elapsedDistance = 10001.0;
-    ai.currentSpeed = 3.0;
-    var target = tt.compute(ai);
-    if (!target.equals(":-)")) {
-        logger.debug("Expected ':-)', got '" + target + "'");
+    if (!target.equals("fin 60:10")) {
+        logger.debug("Expected 'fin 60:10', got '" + target + "'");
         return false;
     }
 
@@ -343,6 +205,7 @@ function targetTempoToHighTempoTest(logger as Logger) as Boolean {
 function targetTempoETATest(logger as Logger) as Boolean {
     Properties.setValue("displayOption", 3);
     var tt = new TargetTempoView();
+    Properties.setValue("displayOption", 0);
     var ai = new Activity.Info();
     var target = "";
  
