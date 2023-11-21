@@ -2,8 +2,8 @@
     <string id="AppName">TargetTempo</string>
     <string id="AppLabel">$1$:$2$ $3$</string>
 
-    <string id="TargetDistanceTitle">Target distance in km:</string>
-    <string id="TargetDistanceError">Distance in kilometers and at least 1</string>
+    <string id="TargetDistanceTitle">Target distance in km/mi:</string>
+    <string id="TargetDistanceError">Distance in km/mi and at least 1</string>
 
     <string id="targetMinutesTitle">Target minutes (1-):</string>
     <string id="TargetMinutesError">Whole minutes and at least 1</string>
@@ -11,8 +11,8 @@
     <string id="TargetSecondsError">Whole seconds (0-59)</string>
 
     <string id="DisplayOptionsTitle">ETA display option:</string>
-    <string id="DisplayOption0">Outside tempo 2-20</string>
-    <string id="DisplayOption1">During last km</string>
+    <string id="DisplayOption0">Outside realistic tempo range</string>
+    <string id="DisplayOption1">During last km/mi</string>
     <string id="DisplayOption2">Alternate between tempo and ETA</string>
     <string id="DisplayOption3">Always show ETA</string>
 </strings>

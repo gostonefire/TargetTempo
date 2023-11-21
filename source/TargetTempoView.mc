@@ -14,11 +14,15 @@ class TargetTempoView extends WatchUi.SimpleDataField {
 
     // Stores settings from properties to avoid reading them every second in the compute method
     private var _targetTime as Number;
-    private var _targetDist as Number;
+    private var _targetDist as Float;
 
     // Display option for when to display ETA instead of target tempo
     private var _displayOption as Number;
     private var _etaAlternate as Number;
+
+    // Device unit setting
+    private var _deviceUnits as Number;
+    private var _unitMultiplier as Float;
 
     // The done flag and what face to show when we are done
     private var _doneFace as String;
@@ -27,6 +31,11 @@ class TargetTempoView extends WatchUi.SimpleDataField {
     // Initializes variables and sets the label
     function initialize() {
         SimpleDataField.initialize();
+
+        // Get distance unit
+        var device = System.getDeviceSettings();
+        _deviceUnits = device.distanceUnits;
+        _unitMultiplier = (1.0 + _deviceUnits * 0.609344);
 
         // Load properties values
         var targetMinutes = Properties.getValue("targetMinutes");
@@ -39,8 +48,9 @@ class TargetTempoView extends WatchUi.SimpleDataField {
         var params = [targetMinutes.format("%d"), targetSeconds.format("%02d"), _targetDist.format("%.1f")];
         label = Lang.format(format, params);
 
-        // Set target time in seconds
+        // Set target time in seconds and adjust distance according device distance unit
         _targetTime = targetMinutes * 60 + targetSeconds;
+        _targetDist *= _unitMultiplier;
 
         // Changes in speed when there are much distance left makes the EAT jump very much,
         // hence we give a long moving average window to longer distances. 
@@ -99,15 +109,16 @@ class TargetTempoView extends WatchUi.SimpleDataField {
             if (doDoneCheck(remainTime, remainDist)) {
                 targetTempo = _doneFace;
             } else {
-                if (_displayOption == 1 && remainDist <= 1.0 || _displayOption == 3) {
+                if (_displayOption == 1 && remainDist <= _unitMultiplier || _displayOption == 3) {
                     targetTempo = eta(remainDist, elapsedTime, currentSpeed);
                 } else {
                     var target = isMoving ? _emaTempo.movingAverage(remainTime / remainDist) : remainTime / remainDist;
+                    target *= _unitMultiplier;
                     var minutes = Math.floor(target / 60.0);
                     var seconds = Math.floor(target - minutes * 60.0); 
 
                     // Let's display only reasonable figures or alternate
-                    if (minutes < 2 || minutes >= 20 || (_displayOption == 2 && _etaAlternate >= 0)) {
+                    if (isOutsideRange(minutes) || (_displayOption == 2 && _etaAlternate >= 0)) {
                         targetTempo = eta(remainDist, elapsedTime, currentSpeed);
                     } else {
                         targetTempo = minutes.format("%d") + ":" + seconds.format("%02d");
@@ -150,6 +161,17 @@ class TargetTempoView extends WatchUi.SimpleDataField {
         } else if (remainDist < 1.5) {
             _smaSpeed.shrink(10);
         }
+    }
+
+    //! Checks if the minute tempo is outside the range considered meaningfull to 
+    //! show. This range is dependent on the system distance unit (metric 0, statute 1).
+    //! @param minutes The minute part of a tempo to check for
+    //! @return True if outside range
+    private function isOutsideRange(minutes as Number) as Boolean {
+        var low = _deviceUnits == 0 ? 2 : 3;
+        var high = _deviceUnits == 0 ? 20 : 30;
+        
+        return minutes < low || minutes >= high ? true : false; 
     }
 }
 

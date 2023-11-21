@@ -2,8 +2,8 @@
     <string id="AppName">TargetTempo</string>
     <string id="AppLabel">$1$:$2$ $3$</string>
 
-    <string id="TargetDistanceTitle">Distansmål i km:</string>
-    <string id="TargetDistanceError">Distans i kilometer och minst 1</string>
+    <string id="TargetDistanceTitle">Distansmål i km/mi:</string>
+    <string id="TargetDistanceError">Distans i km/mi och minst 1</string>
 
     <string id="targetMinutesTitle">Mål minuter (1-):</string>
     <string id="TargetMinutesError">Hela minuter och minst 1</string>
@@ -11,8 +11,8 @@
     <string id="TargetSecondsError">Hela sekunder (0-59)</string>
 
     <string id="DisplayOptionsTitle">ETA visningsalternativ:</string>
-    <string id="DisplayOption0">Tempo utanför 2-20</string>
-    <string id="DisplayOption1">Under sista km</string>
+    <string id="DisplayOption0">Utanför realistiskt tempo</string>
+    <string id="DisplayOption1">Under sista km/mi</string>
     <string id="DisplayOption2">Alternera mellan tempo och ETA</string>
     <string id="DisplayOption3">Visa alltid ETA</string>
 </strings>
