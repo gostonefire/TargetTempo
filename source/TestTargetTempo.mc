@@ -2,12 +2,18 @@ import Toybox.Activity;
 import Toybox.Lang;
 import Toybox.Test;
 import Toybox.Application.Properties;
+import Toybox.System;
 
 //! Tests behaviour when device still reports nulls. 
 //! @param logger Is a Test.Logger object
 //! @return A boolean indicating success (true) or fail (false)
 (:test)
 function targetTempoNullTest(logger as Logger) as Boolean {
+    var targetValue = "6:00";
+    if (System.getDeviceSettings().distanceUnits == 1) {
+        targetValue = "6:00";
+    }
+
     var tt = new TargetTempoView();
     var ai = new Activity.Info();
 
@@ -15,8 +21,8 @@ function targetTempoNullTest(logger as Logger) as Boolean {
     ai.elapsedDistance = null;
     ai.currentSpeed = null;
     var target = tt.compute(ai);
-    if (!target.equals("6:00")) {
-        logger.debug("Expected '6:00', got '" + target + "'");
+    if (!target.equals(targetValue)) {
+        logger.debug("Expected '" + targetValue + "', got '" + target + "'");
         return false;
     }
 
@@ -28,6 +34,11 @@ function targetTempoNullTest(logger as Logger) as Boolean {
 //! @return A boolean indicating success (true) or fail (false)
 (:test)
 function targetTempoZeroTest(logger as Logger) as Boolean {
+    var targetValue = "6:00";
+    if (System.getDeviceSettings().distanceUnits == 1) {
+        targetValue = "6:00";
+    }
+
     var tt = new TargetTempoView();
     var ai = new Activity.Info();
 
@@ -35,8 +46,8 @@ function targetTempoZeroTest(logger as Logger) as Boolean {
     ai.elapsedDistance = 0.0;
     ai.currentSpeed = 0.0;
     var target = tt.compute(ai);
-    if (!target.equals("6:00")) {
-        logger.debug("Expected '6:00', got '" + target + "'");
+    if (!target.equals(targetValue)) {
+        logger.debug("Expected '" + targetValue + "', got '" + target + "'");
         return false;
     }
 
@@ -51,6 +62,11 @@ function targetTempoZeroTest(logger as Logger) as Boolean {
 //! @return A boolean indicating success (true) or fail (false)
 (:test)
 function targetTempoFillSMATest(logger as Logger) as Boolean {
+    var targetValue = "6:10";
+    if (System.getDeviceSettings().distanceUnits == 1) {
+        targetValue = "6:06";
+    }
+
     var tt = new TargetTempoView();
     var ai = new Activity.Info();
     var target = "";
@@ -62,8 +78,8 @@ function targetTempoFillSMATest(logger as Logger) as Boolean {
         target = tt.compute(ai);
     }
 
-    if (!target.equals("6:09")) {
-        logger.debug("Expected '6:09', got '" + target + "'");
+    if (!target.equals(targetValue)) {
+        logger.debug("Expected '" + targetValue + "', got '" + target + "'");
         return false;
     }
 
@@ -78,6 +94,11 @@ function targetTempoFillSMATest(logger as Logger) as Boolean {
 //! @return A boolean indicating success (true) or fail (false)
 (:test)
 function targetTempoEMATest(logger as Logger) as Boolean {
+    var targetValue = "6:10";
+    if (System.getDeviceSettings().distanceUnits == 1) {
+        targetValue = "6:06";
+    }
+
     var tt = new TargetTempoView();
     var ai = new Activity.Info();
     var target = "";
@@ -90,11 +111,11 @@ function targetTempoEMATest(logger as Logger) as Boolean {
     }
 
     ai.elapsedTime = 10000;
-    ai.elapsedDistance = 460.0;
+    ai.elapsedDistance = 400.0;
     target = tt.compute(ai);
 
-    if (!target.equals("6:10")) {
-        logger.debug("Expected '6:10', got '" + target + "'");
+    if (!target.equals(targetValue)) {
+        logger.debug("Expected '" + targetValue + "', got '" + target + "'");
         return false;
     }
 
@@ -109,15 +130,22 @@ function targetTempoEMATest(logger as Logger) as Boolean {
 //! @return A boolean indicating success (true) or fail (false)
 (:test)
 function targetTempoDistLeftTimeEqualTest(logger as Logger) as Boolean {
+    var targetValue = "eta 60:10";
+    var statuteMultiplier = 1.0;
+    if (System.getDeviceSettings().distanceUnits == 1) {
+        targetValue = "eta 60:16";
+        statuteMultiplier = 1.609344;
+    }
+
     var tt = new TargetTempoView();
     var ai = new Activity.Info();
 
     ai.elapsedTime = 3600000;
-    ai.elapsedDistance = 9970.0;
+    ai.elapsedDistance = 9970.0 * statuteMultiplier;
     ai.currentSpeed = 3.0;
     var target = tt.compute(ai);
-    if (!target.equals("eta 60:10")) {
-        logger.debug("Expected 'eta 60:10', got '" + target + "'");
+    if (!target.equals(targetValue)) {
+        logger.debug("Expected '" + targetValue + "', got '" + target + "'");
         return false;
     }
 
@@ -132,15 +160,22 @@ function targetTempoDistLeftTimeEqualTest(logger as Logger) as Boolean {
 //! @return A boolean indicating success (true) or fail (false)
 (:test)
 function targetTempoDistEqualTimePassedTest(logger as Logger) as Boolean {
+    var targetValue = "fin 60:10";
+    var statuteMultiplier = 1.0;
+    if (System.getDeviceSettings().distanceUnits == 1) {
+        targetValue = "fin 60:10";
+        statuteMultiplier = 1.609344;
+    }
+
     var tt = new TargetTempoView();
     var ai = new Activity.Info();
 
     ai.elapsedTime = 3610000;
-    ai.elapsedDistance = 10000.0;
+    ai.elapsedDistance = 10000.0 * statuteMultiplier;
     ai.currentSpeed = 3.0;
     var target = tt.compute(ai);
-    if (!target.equals("fin 60:10")) {
-        logger.debug("Expected 'fin 60:10', got '" + target + "'");
+    if (!target.equals(targetValue)) {
+        logger.debug("Expected '" + targetValue + "', got '" + target + "'");
         return false;
     }
 
@@ -157,22 +192,29 @@ function targetTempoDistEqualTimePassedTest(logger as Logger) as Boolean {
 //! @return A boolean indicating success (true) or fail (false)
 (:test)
 function targetTempoDistFractionLeftTest(logger as Logger) as Boolean {
+    var targetValue = "eta 0:00";
+    var statuteMultiplier = 1.0;
+    if (System.getDeviceSettings().distanceUnits == 1) {
+        targetValue = "eta 0:00";
+        statuteMultiplier = 1.609344;
+    }
+
     var tt = new TargetTempoView();
     var ai = new Activity.Info();
 
     ai.elapsedTime = 0;
-    ai.elapsedDistance = 10000.0 - 0.001;
+    ai.elapsedDistance = 10000.0 * statuteMultiplier - 0.001;
     ai.currentSpeed = 3.0;
     var target = tt.compute(ai);
-    if (!target.equals("eta 0:00")) {
-        logger.debug("Expected 'eta 0:00', got '" + target + "'");
+    if (!target.equals(targetValue)) {
+        logger.debug("Expected '" + targetValue + "', got '" + target + "'");
         return false;
     }
 
     return true;
 }
 
-//! Test that we can get the limited output of 'eta 65:32'.
+//! Test that we can get eta output instead of target tempo when target tempo to high.
 //! This test is dependent on the default property values in
 //! targeDistance and targetTime, so make sure to revert back to default
 //! after having modified persistent storage from within the simulator.
@@ -180,22 +222,29 @@ function targetTempoDistFractionLeftTest(logger as Logger) as Boolean {
 //! @return A boolean indicating success (true) or fail (false)
 (:test)
 function targetTempoToHighTempoTest(logger as Logger) as Boolean {
+    var targetValue = "eta 65:50";
+    var elapsedTime = 3450;
+    if (System.getDeviceSettings().distanceUnits == 1) {
+        targetValue = "eta 88:51";
+        elapsedTime = 2800;
+    }
+
     var tt = new TargetTempoView();
     var ai = new Activity.Info();
 
-    ai.elapsedTime = 3599000;
-    ai.elapsedDistance = 9000.0;
+    ai.elapsedTime = elapsedTime * 1000;
+    ai.elapsedDistance = 8500.0;
     ai.currentSpeed = 3.0;
     var target = tt.compute(ai);
-    if (!target.equals("eta 65:32")) {
-        logger.debug("Expected 'eta 65:32', got '" + target + "'");
+    if (!target.equals(targetValue)) {
+        logger.debug("Expected '" + targetValue + "', got '" + target + "'");
         return false;
     }
 
     return true;
 }
 
-//! Tests behaviour after SMA has handed over to EMA. 
+//! Tests SMA dynamic Moving Average for ETA. 
 //! This test is dependent on the default property values in
 //! targeDistance and targetTime, so make sure to revert back to default
 //! after having modified persistent storage from within the simulator.
@@ -203,6 +252,14 @@ function targetTempoToHighTempoTest(logger as Logger) as Boolean {
 //! @return A boolean indicating success (true) or fail (false)
 (:test)
 function targetTempoETATest(logger as Logger) as Boolean {
+    var targetValue1 = "eta 55:07";
+    var targetValue2 = "eta 55:14";
+    var targetValue3 = "eta 54:56";
+    var statuteAdder = 0.0;
+    if (System.getDeviceSettings().distanceUnits == 1) {
+        statuteAdder = 6093.44;
+    }
+
     Properties.setValue("displayOption", 3);
     var tt = new TargetTempoView();
     Properties.setValue("displayOption", 0);
@@ -211,58 +268,55 @@ function targetTempoETATest(logger as Logger) as Boolean {
  
     for (var i = 0; i < 200; i += 1) {
         ai.elapsedTime = i * 1000;
-        ai.elapsedDistance = i * 3.0;
+        ai.elapsedDistance = i * 3.0 + statuteAdder;
         ai.currentSpeed = 3.0;
         tt.compute(ai);
     }
 
     ai.elapsedTime = 200000;
-    ai.elapsedDistance = 600.0;
+    ai.elapsedDistance = 600.0 + statuteAdder;
     ai.currentSpeed = 6.0;
     target = tt.compute(ai);
 
-    // expected output given a moving window size of 120 and one item in the buffer is 6.0
-    // and the rest 3.0
-    if (!target.equals("eta 55:07")) {
-        logger.debug("Expected 'eta 55:07', got '" + target + "'");
+    // expected output given a moving window size of 120
+    if (!target.equals(targetValue1)) {
+        logger.debug("Expected '" + targetValue1 + "', got '" + target + "'");
         return false;
     }
 
     for (var i = 0; i < 200; i += 1) {
         ai.elapsedTime = i * 1000 + 2000000;
-        ai.elapsedDistance = i * 3.0 + 6000;
+        ai.elapsedDistance = i * 3.0 + 6000 + statuteAdder;
         ai.currentSpeed = 3.0;
         tt.compute(ai);
     }
 
     ai.elapsedTime = 2200000;
-    ai.elapsedDistance = 6600.0;
+    ai.elapsedDistance = 6600.0 + statuteAdder;
     ai.currentSpeed = 6.0;
     target = tt.compute(ai);
 
-    // expected output given a moving window size of 60 and one item in the buffer is 6.0
-    // and the rest 3.0
-    if (!target.equals("eta 55:14")) {
-        logger.debug("Expected 'eta 55:14', got '" + target + "'");
+    // expected output given a moving window size of 60
+    if (!target.equals(targetValue2)) {
+        logger.debug("Expected '" + targetValue2 + "', got '" + target + "'");
         return false;
     }
 
     for (var i = 0; i < 100; i += 1) {
         ai.elapsedTime = i * 1000 + 2833333;
-        ai.elapsedDistance = i * 3.0 + 8500;
+        ai.elapsedDistance = i * 3.0 + 8500 + statuteAdder;
         ai.currentSpeed = 3.0;
         tt.compute(ai);
     }
 
     ai.elapsedTime = 2933333;
-    ai.elapsedDistance = 8800.0;
+    ai.elapsedDistance = 8800.0 + statuteAdder;
     ai.currentSpeed = 6.0;
     target = tt.compute(ai);
 
-    // expected output given a moving window size of 10 and one item in the buffer is 6.0
-    // and the rest 3.0
-    if (!target.equals("eta 54:56")) {
-        logger.debug("Expected 'eta 54:56', got '" + target + "'");
+    // expected output given a moving window size of 10
+    if (!target.equals(targetValue3)) {
+        logger.debug("Expected '" + targetValue3 + "', got '" + target + "'");
         return false;
     }
 

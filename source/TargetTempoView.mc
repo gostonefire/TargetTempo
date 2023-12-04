@@ -97,7 +97,6 @@ class TargetTempoView extends WatchUi.SimpleDataField {
                 elapsedTime = deviceTime / 1000.0;
                 elapsedDist = deviceDistance / 1000.0;
                 currentSpeed = _smaSpeed.movingAverage(deviceSpeed);
-                // System.println(deviceSpeed + " " + currentSpeed + " " + _smaSpeed.size() + " " + elapsedTime + " " + elapsedDist);
                 isMoving = true;
             }
 
@@ -113,7 +112,8 @@ class TargetTempoView extends WatchUi.SimpleDataField {
                     targetTempo = eta(remainDist, elapsedTime, currentSpeed);
                 } else {
                     var target = isMoving ? _emaTempo.movingAverage(remainTime / remainDist) : remainTime / remainDist;
-                    target *= _unitMultiplier;
+                    target = Math.round(target * _unitMultiplier);
+
                     var minutes = Math.floor(target / 60.0);
                     var seconds = Math.floor(target - minutes * 60.0); 
 

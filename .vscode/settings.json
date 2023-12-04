@@ -1,0 +1,20 @@
+{
+    "monkeyC.testDevices": [
+        "fr245",
+        "fr245m",
+        "fr255",
+        "fr255m",
+        "fr255s",
+        "fr255sm",
+        "fr265",
+        "fr265s",
+        "fr55",
+        "fr645m",
+        "fr745",
+        "fr945",
+        "fr945lte",
+        "fr955",
+        "fr965",
+        "marq2"
+    ]
+}
