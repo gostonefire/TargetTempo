@@ -322,3 +322,19 @@ function targetTempoETATest(logger as Logger) as Boolean {
 
     return true;
 }
+
+//! Prints debug to show which units display is used.
+//! This is just for convinience so that it is easy to check that
+//! we actually tested both metric and statute miles
+//! @param logger Is a Test.Logger object
+//! @return A boolean indicating success (true) or fail (false)
+(:test)
+function unitsDisplayTest(logger as Logger) as Boolean {
+    if (System.getDeviceSettings().distanceUnits == 0) {
+        logger.debug("Using metric as units");
+    } else {
+        logger.debug("Using statute miles as units");
+    }
+
+    return true;
+}
