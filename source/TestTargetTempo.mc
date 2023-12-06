@@ -323,6 +323,92 @@ function targetTempoETATest(logger as Logger) as Boolean {
     return true;
 }
 
+//! Tests so that outputs are realistic with realistic device inputs.
+//! This test is dependent on the default property values in
+//! targeDistance and targetTime, so make sure to revert back to default
+//! after having modified persistent storage from within the simulator.
+//! @param logger Is a Test.Logger object
+//! @return A boolean indicating success (true) or fail (false)
+(:test)
+function targetTempoRealisticTest(logger as Logger) as Boolean {
+    var oldMinutes = Properties.getValue("targetMinutes");
+    var oldSeconds = Properties.getValue("targetSeconds");
+    var oldDisplay = Properties.getValue("displayOption");
+
+    var targetValue = "5:03";
+    var targetFinish = "fin 50:31";
+    var targetETA = "eta 50:30";
+    var laps = 3031;
+    Properties.setValue("targetMinutes", 50);
+    Properties.setValue("targetSeconds", 31);
+    if (System.getDeviceSettings().distanceUnits == 1) {
+        targetValue = "8:08";
+        targetFinish = "fin 81:17";
+        targetETA = "eta 81:16";
+        laps = 4877;
+        Properties.setValue("targetMinutes", 81);
+        Properties.setValue("targetSeconds", 16);
+    }
+
+    Properties.setValue("displayOption", 1);
+
+    var tt = new TargetTempoView();
+    var ai = new Activity.Info();
+    var target = "";
+    Properties.setValue("targetMinutes", oldMinutes);
+    Properties.setValue("targetSeconds", oldSeconds);
+    Properties.setValue("displayOption", oldDisplay);
+
+    for (var i = 0; i < 100; i += 1) {
+        ai.elapsedTime = i * 1000;
+        ai.elapsedDistance = i * 3.3;
+        ai.currentSpeed = 3.3;
+        target = tt.compute(ai);
+    }
+
+    if (!target.equals(targetValue)) {
+        logger.debug("Expected '" + targetValue + "', got '" + target + "'");
+        return false;
+    }
+
+    for (var i = 100; i < 1000; i += 1) {
+        ai.elapsedTime = i * 1000;
+        ai.elapsedDistance = i * 3.3;
+        ai.currentSpeed = 3.3;
+        target = tt.compute(ai);
+    }
+
+    if (!target.equals(targetValue)) {
+        logger.debug("Expected '" + targetValue + "', got '" + target + "'");
+        return false;
+    }
+
+    for (var i = 1000; i < laps; i += 1) {
+        ai.elapsedTime = i * 1000;
+        ai.elapsedDistance = i * 3.3;
+        ai.currentSpeed = 3.3;
+        target = tt.compute(ai);
+    }
+
+    if (!target.equals(targetETA)) {
+        logger.debug("Expected '" + targetETA + "', got '" + target + "'");
+        return false;
+    }
+
+
+    ai.elapsedTime = laps * 1000;
+    ai.elapsedDistance = laps * 3.3;
+    ai.currentSpeed = 3.3;
+    target = tt.compute(ai);
+    if (!target.equals(targetFinish)) {
+        logger.debug("Expected '" + targetFinish + "', got '" + target + "'");
+        return false;
+    }
+
+    return true;
+}
+
+
 //! Prints debug to show which units display is used.
 //! This is just for convinience so that it is easy to check that
 //! we actually tested both metric and statute miles

@@ -1,5 +1,9 @@
 {
     "monkeyC.testDevices": [
+        "epix2",
+        "epix2pro42mm",
+        "epix2pro47mm",
+        "epix2pro51mm",
         "fenix5plus",
         "fenix5splus",
         "fenix5xplus",
