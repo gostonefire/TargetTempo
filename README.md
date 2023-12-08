@@ -19,6 +19,20 @@ There is also a display option for when ETA is shown instead of target tempo. Yo
 “Outside realistic tempo range” (2-20 if unit is km and 3-30 if unit is miles) is default since you often end up there during the last couple of hundred meters of the run unless you really managed to stick to your goal.
 
 Finally, when you reach the distance goal the data field stops updating and instead shows the finishing time over the target distance, e.g. “fin 98:30”. Since the data field is updated once a second it can thus differ a second from activity reports provided by Garmin standard functionality.
+## Configure the app
+The Target Tempo app is configured using the Connect IQ app.
+
+While in Connect IQ click on "My Device", "My Data Fields" and then on the Target Tempo app
+
+<img src="images/Screenshot_20231208_094218_Connect_IQ.jpg" width="300">
+<img src="images/Screenshot_20231208_094525_Connect_IQ.jpg" width="300">
+
+Click on Settings after which you set your targets for distance (kilometers or miles) and time. You can also click on "ETA display option" to get a drop down meny of the available alternatives described above
+
+<img src="images/Screenshot_20231208_094005_Connect_IQ.jpg" width="300">
+<img src="images/Screenshot_20231208_094041_Connect_IQ.jpg" width="300">
+
+When hitting Save the Connect IQ app automatically syncs the new settings with your device (if of course turned on and within reach). The label of the app in the data field will reflect your time and distance settings so you can confirm that the device was uppdated accordingly.
 
 ## Implementation notes
 The math for calculating target tempo and ETA is simple and uses only three data points from the watch: elapsed time, elapsed distance, and current speed in relation to your target settings. The trick is to avoid too much fluctuation in the calculated values. Hence moving averages (MA) are used to smoothen a bit. The target tempo uses an exponential MA window size of 10, i.e. the 10 last readings (1 every second) are used where the last one is weighted the most. The ETA is slightly more complicated since even smaller changes in speed early in the run greatly affects the estimated value. Hence, ETA uses a dynamic simple MA where the window size is 120 when remaining distance is 4 km or more, it steps down (1 step per second) to 60 when between 4 and 1.5 km left and finally it steps down to 10 when between 1.5 and 0 km left.
