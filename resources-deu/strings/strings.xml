@@ -5,10 +5,12 @@
     <string id="TargetDistanceTitle">Entfernungsziel in km/mi:</string>
     <string id="TargetDistanceError">Entfernung km/mi und mindestens 1</string>
 
-    <string id="targetMinutesTitle">Zeil Minuten (1-):</string>
+    <string id="targetMinutesTitle">Ziel Minuten (1-):</string>
     <string id="TargetMinutesError">Ganzen Minuten und mindestens 1</string>
-    <string id="targetSecondsTitle">Zeil Sekunden (0-59):</string>
+    <string id="targetSecondsTitle">Ziel Sekunden (0-59):</string>
     <string id="TargetSecondsError">Ganzen Sekunden (0-59)</string>
+
+    <string id="timeAsTempoTitle">Zeitziel als Durchschnittstempo:</string>
 
     <string id="DisplayOptionsTitle">Option zur ETA anzeige:</string>
     <string id="DisplayOption0">Außerhalb des realistischen Tempos</string>

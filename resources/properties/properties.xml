@@ -2,5 +2,6 @@
     <property id="targetDistance" type="float">10.0</property>
     <property id="targetMinutes" type="number">60</property>
     <property id="targetSeconds" type="number">0</property>
+    <property id="timeAsTempo" type="boolean">false</property>
     <property id="displayOption" type="number">0</property>
 </properties>

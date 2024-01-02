@@ -11,6 +11,10 @@
         <settingConfig type="numeric" required="true" min="0" max="59" errorMessage="@Strings.TargetSecondsError" />
     </setting>
 
+    <setting propertyKey="@Properties.timeAsTempo" title="@Strings.timeAsTempoTitle">
+        <settingConfig type="boolean" required="true" />
+    </setting>
+
     <setting propertyKey="@Properties.displayOption" title="@Strings.DisplayOptionsTitle">
         <settingConfig type="list">
             <listEntry value="0">@Strings.DisplayOption0</listEntry>

@@ -10,6 +10,8 @@
     <string id="targetSecondsTitle">Target seconds (0-59):</string>
     <string id="TargetSecondsError">Whole seconds (0-59)</string>
 
+    <string id="timeAsTempoTitle">Time target as average tempo:</string>
+
     <string id="DisplayOptionsTitle">ETA display option:</string>
     <string id="DisplayOption0">Outside realistic tempo range</string>
     <string id="DisplayOption1">During last km/mi</string>

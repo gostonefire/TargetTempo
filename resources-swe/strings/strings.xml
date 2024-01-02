@@ -10,6 +10,8 @@
     <string id="targetSecondsTitle">Mål sekunder (0-59):</string>
     <string id="TargetSecondsError">Hela sekunder (0-59)</string>
 
+    <string id="timeAsTempoTitle">Tidsmål som medeltempo:</string>
+
     <string id="DisplayOptionsTitle">ETA visningsalternativ:</string>
     <string id="DisplayOption0">Utanför realistiskt tempo</string>
     <string id="DisplayOption1">Under sista km/mi</string>
