@@ -30,7 +30,7 @@ While in Connect IQ click on "My Device", "My Data Fields" and then on the Targe
 
 Click on Settings after which you set your targets for distance (kilometers or miles) and time. You can also click on "ETA display option" to get a drop down meny of the available alternatives described above
 
-<img src="images/Screenshot_20231208_094005_Connect_IQ.jpg" width="300"> <img src="images/Screenshot_20231208_094041_Connect_IQ.jpg" width="300">
+<img src="images/Screenshot_20231208_094005_Connect_IQ.jpg" width="300"> <img src="images/Screenshot_20240102_145314_Connect_IQ.jpg" width="300">
 
 When hitting Save the Connect IQ app automatically syncs the new settings with your device (if of course turned on and within reach). The label of the app in the data field will reflect your time and distance settings so you can confirm that the device was uppdated accordingly.
 
