@@ -43,6 +43,13 @@ class TargetTempoView extends WatchUi.SimpleDataField {
         _targetDist = Properties.getValue("targetDistance");
         _displayOption = Properties.getValue("displayOption");
 
+        // Convert set time from tempo to absolute time if needed
+        if (Properties.getValue("timeAsTempo") == true) {
+            targetSeconds = (targetMinutes * 60 + targetSeconds) * _targetDist;
+            targetMinutes = Math.floor(targetSeconds / 60.0);
+            targetSeconds = Math.floor(targetSeconds - targetMinutes * 60.0);
+        }
+
         // Construct the label that shows current time and distance goal
         var format = Application.loadResource(Rez.Strings.AppLabel);
         var params = [targetMinutes.format("%d"), targetSeconds.format("%02d"), _targetDist.format("%.1f")];
