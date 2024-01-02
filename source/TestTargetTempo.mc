@@ -4,6 +4,50 @@ import Toybox.Test;
 import Toybox.Application.Properties;
 import Toybox.System;
 
+//! Tests setting target time as tempo. 
+//! This test is dependent on the default property values in
+//! targeDistance and targetTime, so make sure to revert back to default
+//! after having modified persistent storage from within the simulator.
+//! @param logger Is a Test.Logger object
+//! @return A boolean indicating success (true) or fail (false)
+(:test)
+function targetTempoTimeAsTempo(logger as Logger) as Boolean {
+    var oldMinutes = Properties.getValue("targetMinutes");
+    var oldSeconds = Properties.getValue("targetSeconds");
+
+    var targetValue = "5:35";
+    var targetLabel = "55:50 10.0";
+    var result = true;
+
+    Properties.setValue("timeAsTempo", true);
+    Properties.setValue("targetMinutes", 5);
+    Properties.setValue("targetSeconds", 35);
+
+    var tt = new TargetTempoView();
+
+    if (!tt.label.equals(targetLabel)) {
+        logger.debug("Expected '" + targetLabel + "', got '" + tt.label + "'");
+        result = false;
+    }
+
+    var ai = new Activity.Info();
+    ai.elapsedTime = 0;
+    ai.elapsedDistance = 0.0;
+    ai.currentSpeed = 3.0;
+    var target = tt.compute(ai);
+ 
+    if (!target.equals(targetValue)) {
+        logger.debug("Expected '" + targetValue + "', got '" + target + "'");
+        result = false;
+    }
+
+    Properties.setValue("timeAsTempo", false);
+    Properties.setValue("targetMinutes", oldMinutes);
+    Properties.setValue("targetSeconds", oldSeconds);
+    
+    return result;
+}
+
 //! Tests behaviour when device still reports nulls. 
 //! @param logger Is a Test.Logger object
 //! @return A boolean indicating success (true) or fail (false)
