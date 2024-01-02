@@ -10,7 +10,9 @@ You also have the possibility to get some related information during the run, i.
 
 Since this is a data field you must set your time and distance targets in the Connect IQ app. Once that is done and you start your activity, the data field will reflect your target settings in its label, e.g. “120:00 21,1” for a half marathon in two hours (the distance is only showing one decimal rounded, but internally it uses what you set).
 
-There is also a display option for when ETA is shown instead of target tempo. You can choose between:
+As an alternative you can chose to set your time target as the average tempo to obtain over the distance. Just tick the check box “Time target as average tempo” and it will internally calculate the total time over the distance. The data field label will reflect the total time, and the initial target tempo will be what you entered in the settings.
+
+There is a display option for when ETA is shown instead of target tempo:
 - Outside realistic tempo range
 - During last km/mi
 - Alternate between tempo and ETA
@@ -18,7 +20,7 @@ There is also a display option for when ETA is shown instead of target tempo. Yo
 
 “Outside realistic tempo range” (2-20 if unit is km and 3-30 if unit is miles) is default since you often end up there during the last couple of hundred meters of the run unless you really managed to stick to your goal.
 
-Finally, when you reach the distance goal the data field stops updating and instead shows the finishing time over the target distance, e.g. “fin 98:30”. Since the data field is updated once a second it can thus differ a second from activity reports provided by Garmin standard functionality.
+When you reach the distance goal the data field stops updating and instead shows the finishing time over the target distance, e.g. “fin 98:30”. Since the data field is updated once a second it can thus differ a second from activity reports provided by Garmin standard functionality.
 ## Configure the app
 The Target Tempo app is configured using the Connect IQ app.
 
@@ -40,6 +42,8 @@ The data field has been tested in real life on a Marq gen 2, all the other watch
 
 The data field app has been left to run a half marathon in the simulator to make sure that there are no memory leaks.
 ## Release notes
+### v0.5.0
+- Adds possibility to enter time target in settings as an average tempo to obtain over the target distance. This doesn’t change how the app works, just a convenient alternative to set a target time.
 ### v0.4.0
 - Adds support for statute miles. When the device is set to use miles as units, the input distance is interpreted as miles and the target tempo will be displayed as minutes per mile.
 - Adds support for Epix, Fenix, Instinct and Venue devices
